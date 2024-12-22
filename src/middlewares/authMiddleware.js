@@ -1,10 +1,11 @@
-const { verifyToken } = require('../utils/jwtHelper');
+const { verifyToken } = require('../helpers/jwtHelper');
+const { sendResponse, sendErrorResponse } = require('../helpers/responseHelper');
 
 const protect = (req, res, next) => {
     const token = req.header('Authorization') && req.header('Authorization').split(' ')[1];
 
     if (!token) {
-        return res.status(401).json({ message: 'No Token, authorization denied' });
+        return sendErrorResponse(res, 'unauthorized', 'No Token, authorization denied');
     }
 
     try {
@@ -12,7 +13,7 @@ const protect = (req, res, next) => {
         req.user = decoded.userId;
         next();
     } catch (error) {
-        return res.status(401).json({ message: 'Token is not valid' });
+        return sendErrorResponse(res, 'unauthorized', 'Token is not valid');
     }
 };
 

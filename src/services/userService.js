@@ -1,6 +1,6 @@
 const bcrypt = require('bcryptjs');
 const userRepository = require('../repositories/userRepository');
-const { generateToken } = require('../utils/jwtHelper');
+const { generateToken } = require('../helpers/jwtHelper');
 
 const registerUser = async (userData) => {
     const { firstName, lastName, email, password } = userData;
@@ -18,7 +18,7 @@ const registerUser = async (userData) => {
         email,
         password: hashedPassword
     });
-    
+
     const token = generateToken(user.id);
 
     return { token, message: 'User registered successfully' };

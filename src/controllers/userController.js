@@ -1,23 +1,21 @@
 const userService = require('../services/userService');
-const { successResponse, errorResponse } = require('../utils/responseHelper');
+const { sendErrorResponse, sendResponse } = require('../helpers/responseHelper');
 
 const registerUser = async (req, res) => {
     try {
         const result = await userService.registerUser(req.body);
-        successResponse(res, { token: result.token }, result.message);
+        sendResponse(res, 'created', { token: result.token }, result.message);
     } catch (error) {
-        console.error(error.message);
-        errorResponse(res, error.message, 404);
+        sendErrorResponse(res, 'internalError', 'Failed to register user');
     }
 };
 
 const loginUser = async (req, res) => {
     try {
         const result = await userService.loginUser(req.body);
-        successResponse(res, { token: result.token }, result.message);
+        sendResponse(res, 'success', { token: result.token }, result.message);
     } catch (error) {
-        console.error(error.message);
-        errorResponse(res, error.message, 400);
+        sendErrorResponse(res, 'unauthorized', 'Invalid credentials');
     }
 };
 
